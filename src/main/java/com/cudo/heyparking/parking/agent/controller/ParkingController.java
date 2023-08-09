@@ -109,6 +109,10 @@ public class ParkingController {
                 responseMap.put("code", ResponseCode.FAIL_INVALID_PARKING_CAPACITY.getCode());
                 responseMap.put("message", ResponseCode.FAIL_INVALID_PARKING_CAPACITY.getMessage());
             }
+            else if (parkingNum > maxParkingNum) {
+                responseMap.put("code", ResponseCode.FAIL_EXCEED_PARKING_CAPACITY.getCode());
+                responseMap.put("message", ResponseCode.FAIL_EXCEED_PARKING_CAPACITY.getMessage());
+            }
             else{
                 responseMap = parkingService.putParking(param);
             }
