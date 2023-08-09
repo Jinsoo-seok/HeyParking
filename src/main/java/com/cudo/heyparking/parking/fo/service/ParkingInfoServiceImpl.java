@@ -39,6 +39,23 @@ public class ParkingInfoServiceImpl implements ParkingInfoService {
 //            dataMap.put("totalCount", parkingVoListTemp.size());
 //            dataMap.put("parkingList", parkingVoListTemp);
 
+            // TODO : 아이콘 색
+//            for (ParkingVo parkingVo : parkingVoList) {
+//                String totalNum = parkingVo.getParkingTotalNumber();
+//                String emptyNum = parkingVo.getParkingEmptyNumber();
+//
+//                double occupancyPercentage = (Double.parseDouble(emptyNum) / Double.parseDouble(totalNum)) * 100;
+//
+//                if (occupancyPercentage >= 70) {
+//                    parkingVo.setParkingColor("green");
+//                } else if (occupancyPercentage >= 30) {
+//                    parkingVo.setParkingColor("orange");
+//                } else {
+//                    parkingVo.setParkingColor("red");
+//                }
+//            }
+
+
             dataMap.put("totalCount", parkingVoList.size());
             dataMap.put("parkingList", parkingVoList);
             resultMap.put("data", dataMap);
