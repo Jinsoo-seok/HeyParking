@@ -15,10 +15,10 @@
             align-items: center;
         }
         #map {
-            /*width: 100%;*/
-            /*height: 100%;*/
-            width: 40%;
-            height: 40%;
+            width: 100%;
+            height: 100%;
+            /*width: 40%;*/
+            /*height: 40%;*/
             border: 2px solid black;
         }
         table {
@@ -32,38 +32,27 @@
 
     <script th:inline="javascript">
         var dataList = [[${dataList}]];
-        if (dataList.length === 0) {
-            alert("No data available.");
+        var markers = []; // 배열로 마커 정보 저장
 
-            const container = document.getElementById('map');
-            const options = {
-                center: new kakao.maps.LatLng(35.416362, 127.390405),
-                level: 7
-            };
-            const map = new kakao.maps.Map(container, options);
-
-        } else {
-            // alert("ok");
-
-            const container = document.getElementById('map');
-            const options = {
-                center: new kakao.maps.LatLng(35.416362, 127.390405),
-                level: 7
-            };
-            const map = new kakao.maps.Map(container, options);
-
-            var imageSrc2 = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
-            var imageSrc = /*[[@{/green.png}]]*/ '';
+        function addMarkers(map) {
             var imageGreen = /*[[@{/green.png}]]*/ '';
             var imageOrange = /*[[@{/orange.png}]]*/ '';
             var imageRed = /*[[@{/red.png}]]*/ '';
             var imageParking = /*[[@{/parking.png}]]*/ '';
 
             var imageSize = new kakao.maps.Size(10, 10);
-            var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
 
             for (var i = 0; i < dataList.length; i++) {
-                console.log(dataList[i].parkingName, dataList[i].parkingLat, dataList[i].parkingLon, dataList[i].parkingColor)
+                var markerImage;
+                if (dataList[i].parkingColor === 'green') {
+                    markerImage = new kakao.maps.MarkerImage(imageGreen, imageSize);
+                } else if (dataList[i].parkingColor === 'orange') {
+                    markerImage = new kakao.maps.MarkerImage(imageOrange, imageSize);
+                } else if (dataList[i].parkingColor === 'red') {
+                    markerImage = new kakao.maps.MarkerImage(imageRed, imageSize);
+                } else {
+                    markerImage = new kakao.maps.MarkerImage(imageParking, imageSize);
+                }
 
                 var marker = new kakao.maps.Marker({
                     map: map,
@@ -71,9 +60,40 @@
                     title: dataList[i].parkingName,
                     image: markerImage
                 });
+
+                // 클릭 이벤트 핸들러
+                kakao.maps.event.addListener(marker, 'click', (function(data) {
+                    return function() {
+                        console.log("Parking Name:", data.parkingName);
+                        console.log("Latitude:", data.parkingLat);
+                        console.log("Longitude:", data.parkingLon);
+                        console.log("Color:", data.parkingColor);
+                        console.log("markers:", markers);
+                    };
+                })(dataList[i]));
+
+                markers.push(marker); // 마커 정보 배열에 추가
             }
         }
-    </script>
 
+        if (dataList.length === 0) {
+            alert("No data available.");
+            const container = document.getElementById('map');
+            const options = {
+                center: new kakao.maps.LatLng(35.416362, 127.390405),
+                level: 7
+            };
+            const map = new kakao.maps.Map(container, options);
+        } else {
+            const container = document.getElementById('map');
+            const options = {
+                center: new kakao.maps.LatLng(35.416362, 127.390405),
+                level: 7
+            };
+            const map = new kakao.maps.Map(container, options);
+
+            addMarkers(map);
+        }
+    </script>
 </body>
 </html>
