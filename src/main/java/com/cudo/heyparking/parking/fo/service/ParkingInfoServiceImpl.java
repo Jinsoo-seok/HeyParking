@@ -23,6 +23,27 @@ public class ParkingInfoServiceImpl implements ParkingInfoService {
     public List<ParkingVo> getParkingVoList() {
         List<ParkingVo> parkingVoList = parkingRepository.findAll();
 
+        for (ParkingVo parkingVo : parkingVoList) {
+            String totalNum = parkingVo.getParkingTotalNumber();
+            String emptyNum = parkingVo.getParkingEmptyNumber();
+
+            if(emptyNum.equals("-1")){
+                parkingVo.setParkingColor("none");
+            }
+            else if (emptyNum.equals("0")) {
+                parkingVo.setParkingColor("red");
+            } else {
+                double occupancyPercentage = (Double.parseDouble(emptyNum) / Double.parseDouble(totalNum)) * 100;
+
+                if (occupancyPercentage >= 70) {
+                    parkingVo.setParkingColor("green");
+                } else {
+                    parkingVo.setParkingColor("orange");
+                }
+            }
+        }
+
+
         if(parkingVoList != null){
             return parkingVoList;
         }
@@ -51,22 +72,6 @@ public class ParkingInfoServiceImpl implements ParkingInfoService {
 //            }
 //            dataMap.put("totalCount", parkingVoListTemp.size());
 //            dataMap.put("parkingList", parkingVoListTemp);
-
-            // TODO : 아이콘 색
-//            for (ParkingVo parkingVo : parkingVoList) {
-//                String totalNum = parkingVo.getParkingTotalNumber();
-//                String emptyNum = parkingVo.getParkingEmptyNumber();
-//
-//                double occupancyPercentage = (Double.parseDouble(emptyNum) / Double.parseDouble(totalNum)) * 100;
-//
-//                if (occupancyPercentage >= 70) {
-//                    parkingVo.setParkingColor("green");
-//                } else if (occupancyPercentage >= 30) {
-//                    parkingVo.setParkingColor("orange");
-//                } else {
-//                    parkingVo.setParkingColor("red");
-//                }
-//            }
 
 
             dataMap.put("totalCount", parkingVoList.size());

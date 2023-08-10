@@ -41,6 +41,9 @@ public class ParkingVo {
     @Column(name = "PARKING_LON", nullable = false)
     private String parkingLon = "0";
 
+    @Transient
+    private String parkingColor = "none";
+
     @Column(name = "UPDATE_DATE", nullable = false)
     private Date updateDate;
 
