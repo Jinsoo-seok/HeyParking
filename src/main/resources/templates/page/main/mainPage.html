@@ -3,42 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>mainPage</title>
+    <script src="/js/functions.js"></script>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=6117695a060f0644636d10eec6c83951&libraries=services"></script>
-
-    <style>
-        body {
-            height: 100vh;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        #map {
-            width: 100%;
-            height: 100%;
-            /*width: 40%;*/
-            /*height: 40%;*/
-            border: 2px solid black;
-        }
-        .info-container {
-            background-color: #f0f0f0;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        .info-item {
-            margin-bottom: 8px;
-        }
-        .info-label {
-            font-weight: bold;
-            font-size: 10px;
-        }
-        .info-value {
-            font-weight: bold;
-            font-size: 10px;
-        }
-    </style>
 </head>
 <body>
     <div id="map"></div>
@@ -49,24 +16,9 @@
         var currentInfowindow = null; // 현재 열린 팝업창 저장
 
         function addMarkers(map) {
-            var imageGreen = /*[[@{/green.png}]]*/ '';
-            var imageOrange = /*[[@{/orange.png}]]*/ '';
-            var imageRed = /*[[@{/red.png}]]*/ '';
-            var imageParking = /*[[@{/parking.png}]]*/ '';
-
-            var imageSize = new kakao.maps.Size(10, 10);
-
             for (var i = 0; i < dataList.length; i++) {
-                var markerImage;
-                if (dataList[i].parkingColor === 'green') {
-                    markerImage = new kakao.maps.MarkerImage(imageGreen, imageSize);
-                } else if (dataList[i].parkingColor === 'orange') {
-                    markerImage = new kakao.maps.MarkerImage(imageOrange, imageSize);
-                } else if (dataList[i].parkingColor === 'red') {
-                    markerImage = new kakao.maps.MarkerImage(imageRed, imageSize);
-                } else {
-                    markerImage = new kakao.maps.MarkerImage(imageParking, imageSize);
-                }
+
+                var markerImage = createMarkerImage(dataList[i].parkingColor);
 
                 var marker = new kakao.maps.Marker({
                     map: map,
@@ -75,7 +27,7 @@
                     image: markerImage
                 });
 
-                // 클릭 이벤트 핸들러
+                // marker 클릭 이벤트 핸들러
                 kakao.maps.event.addListener(marker, 'click', (function(marker, data) {
                     return function() {
                         console.log("click")
@@ -88,7 +40,6 @@
                             var infowindowParkingName = extractValue(infowindowContent, "Name:");
                             var infowindowParkingLat = extractValue(infowindowContent, "Lat:");
                             var infowindowParkingLon = extractValue(infowindowContent, "Lon:");
-
                             console.log("Name - ", infowindowParkingName);
                             console.log("Lat - ", infowindowParkingLat);
                             console.log("Lon - ", infowindowParkingLon);
@@ -119,36 +70,8 @@
                     };
                 })(marker, dataList[i]));
 
-                markers.push(marker); // 마커 정보 배열에 추가
+                markers.push(marker);
             }
-        }
-        function createInfoWindowContent(data) {
-            return '<div class="info-container">' +
-                '    <div class="info-item">' +
-                '        <span class="info-label">Name:</span> <span class="info-value">' + data.parkingName + '</span>' +
-                '    </div>' +
-                '    <div class="info-item">' +
-                '        <span class="info-label">Lat:</span> <span class="info-value">' + data.parkingLat + '</span>' +
-                '    </div>' +
-                '    <div class="info-item">' +
-                '        <span class="info-label">Lon:</span> <span class="info-value">' + data.parkingLon + '</span>' +
-                '    </div>' +
-                '    <div class="info-item">' +
-                '        <span class="info-label">Status:</span> <span class="info-value">' + data.parkingColor + '</span>' +
-                '    </div>' +
-                '</div>';
-        }
-
-        function extractValue(content, label) {
-            var startIndex = content.indexOf(label) + label.length;
-            var startTag = '<span class="info-value">';
-            var endTag = '</span>';
-            var startIndexValue = content.indexOf(startTag, startIndex) + startTag.length;
-            var endIndexValue = content.indexOf(endTag, startIndexValue);
-
-            var extractedValue = content.substring(startIndexValue, endIndexValue).trim();
-
-            return extractedValue;
         }
 
         const container = document.getElementById('map');
