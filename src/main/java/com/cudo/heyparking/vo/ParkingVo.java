@@ -36,10 +36,10 @@ public class ParkingVo {
     private String parkingEmptyNumber = "0";
 
     @Column(name = "PARKING_LAT", nullable = false)
-    private String parkingLatitude = "0";
+    private String parkingLat = "0";
 
     @Column(name = "PARKING_LON", nullable = false)
-    private String parkingLongitude = "0";
+    private String parkingLon = "0";
 
     @Column(name = "UPDATE_DATE", nullable = false)
     private Date updateDate;

@@ -20,6 +20,19 @@ public class ParkingInfoServiceImpl implements ParkingInfoService {
     final ParkingRepository parkingRepository;
 
     @Override
+    public List<ParkingVo> getParkingVoList() {
+        List<ParkingVo> parkingVoList = parkingRepository.findAll();
+
+        if(parkingVoList != null){
+            return parkingVoList;
+        }
+        else{
+            return null;
+        }
+    }
+
+
+    @Override
     public Map<String, Object> getParkingList() {
         Map<String, Object> resultMap = new HashMap<>();
         Map<String, Object> dataMap = new HashMap<>();

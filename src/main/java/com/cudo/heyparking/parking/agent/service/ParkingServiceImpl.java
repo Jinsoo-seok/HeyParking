@@ -127,8 +127,8 @@ public class ParkingServiceImpl implements ParkingService {
             }
             else{
                 checkParkingVo.setParkingEmptyNumber((String) param.get("parkingEmptyNum"));
-                checkParkingVo.setParkingLatitude((String) param.get("parkingLat"));
-                checkParkingVo.setParkingLongitude((String) param.get("parkingLon"));
+                checkParkingVo.setParkingLat((String) param.get("parkingLat"));
+                checkParkingVo.setParkingLon((String) param.get("parkingLon"));
 
                 ParkingVo afterParkingVo = parkingRepository.save(checkParkingVo);
 
