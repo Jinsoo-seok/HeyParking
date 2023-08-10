@@ -33,7 +33,7 @@ public class ParkingVo {
     private String parkingTotalNumber;
 
     @Column(name = "PARKING_EMPTY_NUM", nullable = false)
-    private String parkingEmptyNumber = "0";
+    private String parkingEmptyNumber = "-1";
 
     @Column(name = "PARKING_LAT", nullable = false)
     private String parkingLat = "0";

@@ -192,8 +192,11 @@ public class ParkingServiceImpl implements ParkingService {
             if(type.equals("addrToLatLon")) {
                 Map<String, Object> addressInfoLatest = responseList.get(0);
 
-                dataMap.put("lat", addressInfoLatest.get("y"));
-                dataMap.put("lon", addressInfoLatest.get("x"));
+                String lat = String.format("%.6f", Double.parseDouble((String) addressInfoLatest.get("y")));
+                String lon = String.format("%.6f", Double.parseDouble((String) addressInfoLatest.get("x")));
+
+                dataMap.put("lat", lat);
+                dataMap.put("lon", lon);
 
                 returnMap.put("data", dataMap);
                 returnMap.putAll(ParameterUtils.responseOption(ResponseCode.SUCCESS.getCodeName()));

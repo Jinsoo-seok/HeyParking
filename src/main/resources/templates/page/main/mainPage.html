@@ -34,6 +34,10 @@
             font-weight: bold;
             font-size: 10px;
         }
+        .info-value {
+            font-weight: bold;
+            font-size: 10px;
+        }
     </style>
 </head>
 <body>
@@ -79,11 +83,15 @@
 
                         if (currentInfowindow) {
                             var infowindowContent = currentInfowindow.getContent();
-                            console.log("infowindowContent", infowindowContent)
+                            console.log("infowindowContent - ", infowindowContent);
 
-                            var infowindowParkingName = extractValue(infowindowContent, "Name:", "</div>");
-                            var infowindowParkingLat = extractValue(infowindowContent, "Lat:", "</div>");
-                            var infowindowParkingLon = extractValue(infowindowContent, "Lon:", "</div>");
+                            var infowindowParkingName = extractValue(infowindowContent, "Name:");
+                            var infowindowParkingLat = extractValue(infowindowContent, "Lat:");
+                            var infowindowParkingLon = extractValue(infowindowContent, "Lon:");
+
+                            console.log("Name - ", infowindowParkingName);
+                            console.log("Lat - ", infowindowParkingLat);
+                            console.log("Lon - ", infowindowParkingLon);
 
                             if (
                                 infowindowParkingName === data.parkingName &&
@@ -96,21 +104,7 @@
                             currentInfowindow = null;
                         }
                         if(popupYn){
-                            var content =
-                                '<div class="info-container">' +
-                                '    <div class="info-item">' +
-                                '        <span class="info-label">Name:</span> ' + data.parkingName +
-                                '    </div>' +
-                                '    <div class="info-item">' +
-                                '        <span class="info-label">Lat:</span> ' + data.parkingLat +
-                                '    </div>' +
-                                '    <div class="info-item">' +
-                                '        <span class="info-label">Lon:</span> ' + data.parkingLon +
-                                '    </div>' +
-                                '    <div class="info-item">' +
-                                '        <span class="info-label">Status:</span> ' + data.parkingColor +
-                                '    </div>' +
-                                '</div>';
+                            var content = createInfoWindowContent(data);
 
                             var infowindow = new kakao.maps.InfoWindow({
                                 content: content,
@@ -128,12 +122,34 @@
                 markers.push(marker); // 마커 정보 배열에 추가
             }
         }
-        function extractValue(content, label, endTag) {
-            var startIndex = content.indexOf(label) + label.length;
-            var endIndex = content.indexOf(endTag, startIndex);
-            return content.substring(startIndex, endIndex).replace(/<\/?[^>]+(>|$)/g, "").trim();
+        function createInfoWindowContent(data) {
+            return '<div class="info-container">' +
+                '    <div class="info-item">' +
+                '        <span class="info-label">Name:</span> <span class="info-value">' + data.parkingName + '</span>' +
+                '    </div>' +
+                '    <div class="info-item">' +
+                '        <span class="info-label">Lat:</span> <span class="info-value">' + data.parkingLat + '</span>' +
+                '    </div>' +
+                '    <div class="info-item">' +
+                '        <span class="info-label">Lon:</span> <span class="info-value">' + data.parkingLon + '</span>' +
+                '    </div>' +
+                '    <div class="info-item">' +
+                '        <span class="info-label">Status:</span> <span class="info-value">' + data.parkingColor + '</span>' +
+                '    </div>' +
+                '</div>';
         }
 
+        function extractValue(content, label) {
+            var startIndex = content.indexOf(label) + label.length;
+            var startTag = '<span class="info-value">';
+            var endTag = '</span>';
+            var startIndexValue = content.indexOf(startTag, startIndex) + startTag.length;
+            var endIndexValue = content.indexOf(endTag, startIndexValue);
+
+            var extractedValue = content.substring(startIndexValue, endIndexValue).trim();
+
+            return extractedValue;
+        }
 
         const container = document.getElementById('map');
         const options = {
