@@ -21,9 +21,18 @@
             /*height: 40%;*/
             border: 2px solid black;
         }
-        table {
-            width: 80%;
-            margin-top: 20px;
+        .info-container {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .info-item {
+            margin-bottom: 8px;
+        }
+        .info-label {
+            font-weight: bold;
+            font-size: 10px;
         }
     </style>
 </head>
@@ -33,6 +42,7 @@
     <script th:inline="javascript">
         var dataList = [[${dataList}]];
         var markers = []; // 배열로 마커 정보 저장
+        var currentInfowindow = null; // 현재 열린 팝업창 저장
 
         function addMarkers(map) {
             var imageGreen = /*[[@{/green.png}]]*/ '';
@@ -62,36 +72,79 @@
                 });
 
                 // 클릭 이벤트 핸들러
-                kakao.maps.event.addListener(marker, 'click', (function(data) {
+                kakao.maps.event.addListener(marker, 'click', (function(marker, data) {
                     return function() {
-                        console.log("Parking Name:", data.parkingName);
-                        console.log("Latitude:", data.parkingLat);
-                        console.log("Longitude:", data.parkingLon);
-                        console.log("Color:", data.parkingColor);
-                        console.log("markers:", markers);
+                        console.log("click")
+                        var popupYn = true;
+
+                        if (currentInfowindow) {
+                            var infowindowContent = currentInfowindow.getContent();
+                            console.log("infowindowContent", infowindowContent)
+
+                            var infowindowParkingName = extractValue(infowindowContent, "Name:", "</div>");
+                            var infowindowParkingLat = extractValue(infowindowContent, "Lat:", "</div>");
+                            var infowindowParkingLon = extractValue(infowindowContent, "Lon:", "</div>");
+
+                            if (
+                                infowindowParkingName === data.parkingName &&
+                                infowindowParkingLat === data.parkingLat &&
+                                infowindowParkingLon === data.parkingLon
+                            ){
+                                popupYn = false;
+                            }
+                            currentInfowindow.close();
+                            currentInfowindow = null;
+                        }
+                        if(popupYn){
+                            var content =
+                                '<div class="info-container">' +
+                                '    <div class="info-item">' +
+                                '        <span class="info-label">Name:</span> ' + data.parkingName +
+                                '    </div>' +
+                                '    <div class="info-item">' +
+                                '        <span class="info-label">Lat:</span> ' + data.parkingLat +
+                                '    </div>' +
+                                '    <div class="info-item">' +
+                                '        <span class="info-label">Lon:</span> ' + data.parkingLon +
+                                '    </div>' +
+                                '    <div class="info-item">' +
+                                '        <span class="info-label">Status:</span> ' + data.parkingColor +
+                                '    </div>' +
+                                '</div>';
+
+                            var infowindow = new kakao.maps.InfoWindow({
+                                content: content,
+                            });
+
+                            infowindow.open(map, marker);
+                            currentInfowindow = infowindow;
+                        }
+                        else{
+                            popupYn = true;
+                        }
                     };
-                })(dataList[i]));
+                })(marker, dataList[i]));
 
                 markers.push(marker); // 마커 정보 배열에 추가
             }
         }
+        function extractValue(content, label, endTag) {
+            var startIndex = content.indexOf(label) + label.length;
+            var endIndex = content.indexOf(endTag, startIndex);
+            return content.substring(startIndex, endIndex).replace(/<\/?[^>]+(>|$)/g, "").trim();
+        }
+
+
+        const container = document.getElementById('map');
+        const options = {
+            center: new kakao.maps.LatLng(35.416362, 127.390405),
+            level: 7
+        };
+        const map = new kakao.maps.Map(container, options);
 
         if (dataList.length === 0) {
             alert("No data available.");
-            const container = document.getElementById('map');
-            const options = {
-                center: new kakao.maps.LatLng(35.416362, 127.390405),
-                level: 7
-            };
-            const map = new kakao.maps.Map(container, options);
         } else {
-            const container = document.getElementById('map');
-            const options = {
-                center: new kakao.maps.LatLng(35.416362, 127.390405),
-                level: 7
-            };
-            const map = new kakao.maps.Map(container, options);
-
             addMarkers(map);
         }
     </script>
