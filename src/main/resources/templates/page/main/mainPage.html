@@ -6,9 +6,35 @@
     <script src="/js/functions.js"></script>
     <link rel="stylesheet" th:href="@{/css/style.css}" />
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=6117695a060f0644636d10eec6c83951&libraries=services"></script>
+    <style>
+        #currentPlace {
+            width: 160px;
+            height: 10px;
+            z-index: 2;
+            position: absolute;
+            top: 4px;
+            left: 50%;
+            transform: translate(-50%, 0);
+            background-color: white;
+            color: #888;
+            padding: 5px;
+            border-radius: 5px;
+            text-align: center;
+            box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
+        }
+        #currentPlace div {
+            font-size: 10px;
+            line-height: 10px;
+        }
+    </style>
 </head>
 <body>
     <div id="map" >
+        <div id ="currentPlace">
+            <div>
+                전라북도 > 남원시 > 도룡동
+            </div>
+        </div>
         <div id="parkingInfo">
             <div><img src="/green.png"><span>여유</span></div>
             <div><img src="/orange.png"><span>혼잡</span></div>
