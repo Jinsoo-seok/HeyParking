@@ -13,6 +13,37 @@ body {
     /*height: 40%;*/
     border: 2px solid black;
 }
+#parkingInfo {
+    z-index: 2;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+#parkingInfo img {
+    width: 15px;
+    height: 15px;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+#parkingInfo span {
+    font-size: 10px;
+    color: black;
+    font-weight: bold;
+    border: 1px solid black;
+    padding: 4px;
+    background-color: white;
+    border-radius: 3px;
+    width: 54px;
+    height: 6px;
+    display:inline-block;
+    text-align: center;
+    line-height: 6px;
+    vertical-alig: middle;
+}
 .info-container {
     background-color: #f0f0f0;
     padding: 10px;

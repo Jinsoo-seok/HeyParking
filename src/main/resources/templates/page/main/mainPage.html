@@ -6,49 +6,16 @@
     <script src="/js/functions.js"></script>
     <link rel="stylesheet" th:href="@{/css/style.css}" />
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=6117695a060f0644636d10eec6c83951&libraries=services"></script>
-    <style>
-        #parkingInfo {
-            z-index: 2;
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            color: white;
-            padding: 10px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        #parkingInfo img {
-            width: 15px;
-            height: 15px;
-            margin-right: 5px;
-            vertical-align: middle;
-        }
-        #parkingInfo span {
-            font-size: 10px;
-            color: black;
-            font-weight: bold;
-            border: 1px solid black;
-            padding: 4px;
-            background-color: white;
-            border-radius: 3px;
-            width: 54px;
-            height: 6px;
-            display:inline-block;
-            text-align: center;
-            line-height: 6px;
-            vertical-alig: middle;
-        }
-    </style>
 </head>
 <body>
-        <div id="map" >
-            <div id="parkingInfo">
-                <div><img src="/green.png"><span>여유</span></div>
-                <div><img src="/orange.png"><span>혼잡</span></div>
-                <div><img src="/red.png"><span>만차</span></div>
-                <div><img src="/parking.png"><span>정보 미제공</span></div>
-            </div>
+    <div id="map" >
+        <div id="parkingInfo">
+            <div><img src="/green.png"><span>여유</span></div>
+            <div><img src="/orange.png"><span>혼잡</span></div>
+            <div><img src="/red.png"><span>만차</span></div>
+            <div><img src="/parking.png"><span>정보 미제공</span></div>
         </div>
+    </div>
 
     <script th:inline="javascript">
         var dataList = [[${dataList}]];
